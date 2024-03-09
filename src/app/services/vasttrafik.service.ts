@@ -15,7 +15,7 @@ export class VasttrafikService {
   private httpOptionsFetchAuth = {
     headers: new HttpHeaders({
       'Content-Type':  'application/x-www-form-urlencoded',
-      Authorization: 'Basic ${{ secrets.VASTTRAFIK_API_KEY }}'
+      Authorization: 'Basic bGlXeTFNMHR0N3pXUzJoM2JfUW9aS0txdk9ZYTpqb3FCTV9aUVU2cHJnNmg4WHRuNkZHaWJOSjBh'
     })
   };
   alingsasgid: string = "9021014017510000";
