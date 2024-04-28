@@ -1,0 +1,81 @@
+<body>
+  <div class="infoArea">
+    <div class="table">
+      <h1 class="title">Alingsås station: tåg mot Göteborg</h1>
+      <p>Visar avgångar två timmar framåt</p>
+      <p *ngIf="todayTime">Data hämtades senast {{ todayTime }}</p>
+      @for (departure of departures?.results; track $index) {
+
+      <div class="cardover">
+        <mat-card
+          class="card {{
+            departure.plannedTime == departure.estimatedTime
+              ? 'onTime'
+              : 'notOnTime'
+          }}"
+          (click)="onClick($index)"
+        >
+          <mat-card-header>
+            <mat-card-title>
+              {{ departure.serviceJourney.line.name }}
+              <span class="cardTitle">
+                {{ departure.serviceJourney.line.designation }}</span
+              >
+            </mat-card-title>
+            <mat-card-subtitle class="cardSubtitle"
+              >mot {{ departure.serviceJourney.direction }}</mat-card-subtitle
+            >
+          </mat-card-header>
+          <mat-card-content class="cardContent">
+            <p *ngIf="departure.isCancelled" class="itemInfoText">
+              Inställd: Ja
+            </p>
+            <p class="itemInfoText">
+              Planerad avgång: {{ departure.plannedTime | date : "HH:mm" }}
+            </p>
+            <p
+              *ngIf="
+                departure.plannedTime != departure.estimatedTime &&
+                !departure.isCancelled
+              "
+              class="itemInfoText"
+            >
+              Faktisk avgång: {{ departure.estimatedTime | date : "HH:mm" }}
+            </p>
+            <p *ngIf="departure.departureDetails" class="itemInfoText">
+              Restid: {{ calculateTravelTime(departure) }} min
+            </p>
+            <p *ngIf="departure.departureDetails" class="itemInfoText">
+              Antal stopp:
+              {{
+                departure.departureDetails.serviceJourneys[0]
+                  .callsOnServiceJourney.length - 1
+              }}
+            </p>
+            <div *ngIf="departure.showExpandedDetails">
+              <hr />
+              <p *ngIf="!departure.isCancelled" class="itemInfoText">
+                Delsträcka inställd:
+                {{ departure.isPartCancelled ? "Ja" : "Nej" }}
+              </p>
+              <p class="itemInfoText">
+                Belastning:
+                {{ getBelastning(departure) }}
+              </p>
+              <p class="itemInfoText">Stannar i:</p>
+              <ul>
+                @for (callsOnServiceJourney of
+                departure.departureDetails.serviceJourneys[0].callsOnServiceJourney.slice(1);
+                track $index) {
+                <li>{{ callsOnServiceJourney.stopPoint.stopArea.name }}</li>
+                }
+              </ul>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      } @empty { Inga tågavgångar har hämtats. }
+    </div>
+  </div>
+</body>
+<router-outlet></router-outlet>

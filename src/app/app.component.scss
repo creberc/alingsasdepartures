@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url("/assets/images/trainbackground.jpg");
+  background-size: cover;
+}
+
+.infoArea {
+  text-align: center;
+  padding-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  margin: 10px;
+  color: black;
+  font-size: 40px;
+}
+
+.table {
+  padding-top: 20px;
+  width: 40vw;
+  height: 85vh;
+  background-color: rgb(255, 252, 241);
+  text-align: center;
+  opacity: 1;
+  border-radius: 10px;
+  overflow: auto;
+  font-size: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: #eead34 #e0e0e0;
+}
+
+.cardTitle {
+  font-weight: 600;
+}
+
+.card {
+  max-width: 500px;
+  margin: auto;
+  cursor: pointer;
+}
+
+.cardSubtitle {
+  text-align: left;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.cardContent {
+  text-align: left;
+}
+
+.cardover {
+  margin: 13px;
+}
+
+.onTime {
+  background-color: rgb(194, 240, 194);
+}
+
+.notOnTime {
+  background-color: rgb(238, 183, 183);
+}
+
+.itemInfoText {
+  margin-bottom: 6px;
+}
