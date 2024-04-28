@@ -50,13 +50,10 @@ export class AppComponent implements OnInit {
     var yyyy = todaysDate.getFullYear();
     var hh = todaysDate.getHours();
     var mm = todaysDate.getMinutes().toString();
-/*     if (mm.length == 1) {
-      mm = '0' + mm;
-    } */
     this.todayTime = dd + '/' + MM + '/' + yyyy + ' ' + hh + ':' + ((mm.length == 1) ? ('0' + mm) : mm);
   }
 
-  onClick(index: number): void {
+  expandOrCollapse(index: number): void {
     if (this.departures && this.departures.results[index].showExpandedDetails) {
       this.departures.results[index].showExpandedDetails = !this.departures.results[index].showExpandedDetails;
     } else if (this.departures) {
