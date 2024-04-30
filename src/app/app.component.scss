@@ -28,7 +28,7 @@ body {
 
 .table {
   padding-top: 20px;
-  width: 65vw;
+  width: 60vw;
   height: 85vh;
   background-color: rgb(255, 252, 241);
   text-align: center;
@@ -65,15 +65,30 @@ body {
 }
 
 .onTime {
-  background-color: rgb(194, 240, 194);
+  background-color: rgb(210, 243, 210);
 }
 
 .notOnTime {
+  background-color: rgb(232, 228, 168);
+}
+
+.canceled {
   background-color: rgb(238, 183, 183);
 }
 
 .itemInfoText {
   margin-bottom: 6px;
+}
+
+.warning-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: red;
+}
+
+.redText {
+  color: red;
 }
 
 .loader {

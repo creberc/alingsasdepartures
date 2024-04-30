@@ -3,7 +3,7 @@
     <div class="table">
       <img
         class="logo"
-        src="/assets/images/alingssdepartures-high-resolution-logo-transparent.png"
+        src="assets/images/alingssdepartures-high-resolution-logo-transparent.png"
         alt="AlingsåsDepartures Logo"
       />
       <p>Visar avgångar två timmar framåt</p>
@@ -12,13 +12,21 @@
       @for (departure of departures?.results; track $index) {
       <div class="cardover" *ngIf="!isLoading()">
         <mat-card
-          class="card {{
-            departure.plannedTime == departure.estimatedTime
+          class="card 
+          {{
+            departure.isCancelled
+              ? 'canceled'
+              : departure.plannedTime == departure.estimatedTime
               ? 'onTime'
               : 'notOnTime'
           }}"
           (click)="expandOrCollapse($index)"
         >
+          <i
+            *ngIf="departure.trafficDisruptions.length != 0"
+            class="material-icons warning-icon"
+            >warning_amber</i
+          >
           <mat-card-header>
             <mat-card-title>
               {{ departure.serviceJourney.line.name }}
@@ -80,7 +88,7 @@
                 }
               </ul>
               <span>
-                <p class="itemInfoText">Trafikstörningar:</p>
+                <p class="itemInfoText redText">Trafikstörningar:</p>
                 <ul>
                   @for (trafficDisruption of departure.trafficDisruptions; track
                   $index) {
@@ -100,6 +108,12 @@
               </span>
             </div>
           </mat-card-content>
+          <i *ngIf="!departure.showExpandedDetails" class="material-icons"
+            >expand_more</i
+          >
+          <i *ngIf="departure.showExpandedDetails" class="material-icons"
+            >expand_less</i
+          >
         </mat-card>
       </div>
       } @empty { Inga tågavgångar har hämtats. }
