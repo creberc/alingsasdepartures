@@ -45,10 +45,10 @@ export class VasttrafikService {
   /**
 * @return {Departure} Returns list of object containing limited information about the departures for the next 2 hours
 */
-  async getDepartures(): Promise<Departures> {
+  async getDepartures(): Promise<Observable<Departures>> {
     await this.checkAuthorization();
-    return firstValueFrom(await this.httpClient.get<Departures>(`${this.endpointPlaneraResa}stop-areas/${this.alingsasgid}/departures?directionGid=${this.goteborggid}&timeSpanInMinutes=${this.timeSpanInMinutes}` , 
-    {headers: {'Authorization': `Bearer ${this.authorization?.access_token}`}}));
+    return this.httpClient.get<Departures>(`${this.endpointPlaneraResa}stop-areas/${this.alingsasgid}/departures?directionGid=${this.goteborggid}&timeSpanInMinutes=${this.timeSpanInMinutes}` , 
+    {headers: {'Authorization': `Bearer ${this.authorization?.access_token}`}});
   }
 
   /**

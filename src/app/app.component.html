@@ -4,9 +4,9 @@
       <h1 class="title">Alingsås station: tåg mot Göteborg</h1>
       <p>Visar avgångar två timmar framåt</p>
       <p *ngIf="todayTime">Data hämtades senast {{ todayTime }}</p>
+      <div *ngIf="isLoading()" class="loader"></div>
       @for (departure of departures?.results; track $index) {
-
-      <div class="cardover">
+      <div class="cardover" *ngIf="!isLoading()">
         <mat-card
           class="card {{
             departure.plannedTime == departure.estimatedTime

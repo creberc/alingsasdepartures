@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { VasttrafikService } from './services/vasttrafik.service';
 import { Departures, Result } from './types/Departures';
 import { MatCardModule} from '@angular/material/card'; 
-import { interval } from 'rxjs';
+import { interval, Subscriber, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
   title = 'alingsasdepartures';
   departures: Departures | null = null;
   todayTime: string = '';
+  loading = signal(true);
+  departuresSubscriber: Subscription | undefined;
 
   constructor(protected readonly vasttrafikSerrvice: VasttrafikService) { }
 
@@ -30,17 +32,26 @@ export class AppComponent implements OnInit {
   }
 
   async getAndFilterDepartures(): Promise<void> {
-    this.departures = await this.vasttrafikSerrvice.getDepartures();
-    if (this.departures) {
-      this.createNowTime();
-      for (let departure of this.departures?.results) {
-        departure.departureDetails = await this.vasttrafikSerrvice.getDepartureByDetailsReference(departure.detailsReference);
-        while (departure.departureDetails.serviceJourneys[0].callsOnServiceJourney[0].stopPoint.name != 'Alingsås station, Alingsås') {
-          departure.departureDetails.serviceJourneys[0].callsOnServiceJourney.shift();
+    this.loading = signal(true);
+    this.vasttrafikSerrvice.getDepartures().then((observer) => {
+      this.departuresSubscriber = observer.subscribe(async (data) => {
+        this.departures = data;
+        for (let departure of this.departures?.results) {
+          departure.departureDetails = await this.vasttrafikSerrvice.getDepartureByDetailsReference(departure.detailsReference);
+          while (departure.departureDetails.serviceJourneys[0].callsOnServiceJourney[0].stopPoint.name != 'Alingsås station, Alingsås') {
+            departure.departureDetails.serviceJourneys[0].callsOnServiceJourney.shift();
+          }
         }
+        this.loading.set(false);
+        this.createNowTime();
+      });
+    });
+    this.departuresSubscriber?.unsubscribe();
+  }
 
-      }
-    }
+  isLoading() {
+    return this.loading();
+    
   }
 
   createNowTime(): void {
@@ -48,9 +59,9 @@ export class AppComponent implements OnInit {
     var dd = String(todaysDate.getDate()).padStart(2, '0');
     var MM = String(todaysDate.getMonth() + 1).padStart(2, '0');
     var yyyy = todaysDate.getFullYear();
-    var hh = todaysDate.getHours();
+    var hh = todaysDate.getHours().toString();
     var mm = todaysDate.getMinutes().toString();
-    this.todayTime = dd + '/' + MM + '/' + yyyy + ' ' + hh + ':' + ((mm.length == 1) ? ('0' + mm) : mm);
+    this.todayTime = dd + '/' + MM + '/' + yyyy + ' ' + ((hh.length == 1) ? ('0' + hh) : hh) + ':' + ((mm.length == 1) ? ('0' + mm) : mm);
   }
 
   expandOrCollapse(index: number): void {
