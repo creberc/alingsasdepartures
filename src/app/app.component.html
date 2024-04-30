@@ -6,7 +6,7 @@
         src="assets/images/alingssdepartures-high-resolution-logo-transparent.png"
         alt="AlingsåsDepartures Logo"
       />
-      <p>Visar avgångar två timmar framåt</p>
+      <p>Visar avgångar mot Göteborg två timmar framåt</p>
       <p *ngIf="todayTime">Data hämtades senast {{ todayTime }}</p>
       <div *ngIf="isLoading()" class="loader"></div>
       @for (departure of departures?.results; track $index) {
