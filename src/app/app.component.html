@@ -22,11 +22,16 @@
           }}"
           (click)="expandOrCollapse($index)"
         >
-          <i
-            *ngIf="departure.trafficDisruptions.length != 0"
-            class="material-icons warning-icon"
-            >warning_amber</i
-          >
+          <div class="warningIcon">
+            <span class="amountOfWarnings">{{
+              departure.trafficDisruptions.length
+            }}</span
+            ><i
+              *ngIf="departure.trafficDisruptions.length != 0"
+              class="material-icons red"
+              >warning_amber</i
+            >
+          </div>
           <mat-card-header>
             <mat-card-title>
               {{ departure.serviceJourney.line.name }}
@@ -88,7 +93,7 @@
                 }
               </ul>
               <span>
-                <p class="itemInfoText redText">Trafikstörningar:</p>
+                <p class="itemInfoText red">Trafikstörningar:</p>
                 <ul>
                   @for (trafficDisruption of departure.trafficDisruptions; track
                   $index) {
@@ -116,7 +121,7 @@
           >
         </mat-card>
       </div>
-      } @empty { Inga tågavgångar har hämtats. }
+      } @empty { Inga tågavgångar kunde hämtas. }
     </div>
   </div>
 </body>
