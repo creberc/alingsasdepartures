@@ -4,6 +4,7 @@ import { Observable, firstValueFrom } from 'rxjs';
 import { Departures } from '../types/Departures';
 import { Authorization } from '../types/Authorization';
 import { DepartureDetails } from '../types/DepartureDetails';
+import { TrafikStorning } from '../types/TrafikStorning';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { DepartureDetails } from '../types/DepartureDetails';
 export class VasttrafikService {
 
   private endpointPlaneraResa: string = "https://ext-api.vasttrafik.se/pr/v4/";
+  private endpointTrafikStorning: string = "https://ext-api.vasttrafik.se/ts/v1/"
   private endpointFetchAuth: string = "https://ext-api.vasttrafik.se/token";
   authorization: Authorization | null = null;
   private httpOptionsFetchAuth = {
@@ -58,6 +60,16 @@ export class VasttrafikService {
   async getDepartureByDetailsReference(detailsReference: string): Promise<DepartureDetails> {
     await this.checkAuthorization();
     return firstValueFrom(await this.httpClient.get<DepartureDetails>(`${this.endpointPlaneraResa}stop-areas/${this.alingsasgid}/departures/${detailsReference}/details?includes=servicejourneycalls&includes=occupancy` , 
+    {headers: {'Authorization': `Bearer ${this.authorization?.access_token}`}}));
+  }
+
+    /**
+* @param {string} lineGid Reference to a specific line
+* @return {TrafikStorning} Returns object containing information about traffic disruptions for the specified line
+*/
+  async getTrafikStorningByLineGid(lineGid: string): Promise<TrafikStorning[]> {
+    await this.checkAuthorization();
+    return firstValueFrom(await this.httpClient.get<TrafikStorning[]>(`${this.endpointTrafikStorning}traffic-situations/line/${lineGid}` , 
     {headers: {'Authorization': `Bearer ${this.authorization?.access_token}`}}));
   }
 

@@ -1,4 +1,5 @@
 import { DepartureDetails } from "./DepartureDetails";
+import { TrafikStorning } from "./TrafikStorning";
 
 export type Departures = {
     results:    Result[];
@@ -29,6 +30,7 @@ export type Result = {
     isPartCancelled:               boolean;
     occupancy:                     Occupancy;
     departureDetails:              DepartureDetails;
+    trafficDisruptions:            TrafikStorning[];
     showExpandedDetails:           boolean;
 }
 

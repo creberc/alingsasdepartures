@@ -1,7 +1,11 @@
 <body>
   <div class="infoArea">
     <div class="table">
-      <h1 class="title">Alingsås station: tåg mot Göteborg</h1>
+      <img
+        class="logo"
+        src="/assets/images/alingssdepartures-high-resolution-logo-transparent.png"
+        alt="AlingsåsDepartures Logo"
+      />
       <p>Visar avgångar två timmar framåt</p>
       <p *ngIf="todayTime">Data hämtades senast {{ todayTime }}</p>
       <div *ngIf="isLoading()" class="loader"></div>
@@ -40,7 +44,12 @@
               "
               class="itemInfoText"
             >
-              Faktisk avgång: {{ departure.estimatedTime | date : "HH:mm" }}
+              Faktisk avgång:
+              {{
+                departure.estimatedTime
+                  ? (departure.estimatedTime | date : "HH:mm")
+                  : (departure.estimatedOtherwisePlannedTime | date : "HH:mm")
+              }}
             </p>
             <p *ngIf="departure.departureDetails" class="itemInfoText">
               Restid: {{ calculateTravelTime(departure) }} min
@@ -70,6 +79,25 @@
                 <li>{{ callsOnServiceJourney.stopPoint.stopArea.name }}</li>
                 }
               </ul>
+              <span>
+                <p class="itemInfoText">Trafikstörningar:</p>
+                <ul>
+                  @for (trafficDisruption of departure.trafficDisruptions; track
+                  $index) {
+                  <li>
+                    <p class="itemInfoText">
+                      <strong>{{ trafficDisruption.title }}</strong>
+                    </p>
+                  </li>
+                  <p class="itemInfoText">
+                    {{ trafficDisruption.description }}
+                  </p>
+                  <p class="itemInfoText">
+                    Allvarlighetsgrad: {{ trafficDisruption.severity }}
+                  </p>
+                  } @empty { Inga trafikstörningar }
+                </ul>
+              </span>
             </div>
           </mat-card-content>
         </mat-card>

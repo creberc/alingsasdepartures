@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
           while (departure.departureDetails.serviceJourneys[0].callsOnServiceJourney[0].stopPoint.name != 'Alingsås station, Alingsås') {
             departure.departureDetails.serviceJourneys[0].callsOnServiceJourney.shift();
           }
+          departure.trafficDisruptions = await this.vasttrafikSerrvice.getTrafikStorningByLineGid(departure.serviceJourney.line.gid);
         }
         this.loading.set(false);
         this.createNowTime();
@@ -75,7 +76,7 @@ export class AppComponent implements OnInit {
   calculateTravelTime(departure: Result): string {
     var estArrivalTime = departure.departureDetails.serviceJourneys[0].callsOnServiceJourney
     .find(ele => ele.stopPoint.name == 'Göteborg Central, Göteborg')?.estimatedArrivalTime;
-    var estDepartureTime = departure.estimatedTime;
+    var estDepartureTime = departure.estimatedTime ? departure.estimatedTime : departure.estimatedOtherwisePlannedTime;
     var timeDifference = '-';
     if(estArrivalTime && estDepartureTime) {
       timeDifference = ((Date.parse(estArrivalTime) - Date.parse(estDepartureTime)) / 60000).toString();
