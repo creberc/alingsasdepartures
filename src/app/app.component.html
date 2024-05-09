@@ -6,7 +6,7 @@
         src="assets/images/alingssdepartures-high-resolution-logo-transparent.png"
         alt="AlingsåsDepartures Logo"
       />
-      <p>Visar avgångar mot Göteborg två timmar framåt</p>
+      <p>Visar avgångar två timmar framåt</p>
       <p *ngIf="todayTime">Data hämtades senast {{ todayTime }}</p>
       <div *ngIf="isLoading()" class="loader"></div>
       @for (departure of departures?.results; track $index) {
@@ -22,15 +22,14 @@
           }}"
           (click)="expandOrCollapse($index)"
         >
-          <div class="warningIcon">
+          <div
+            *ngIf="departure.trafficDisruptions.length != 0"
+            class="warningIcon"
+          >
             <span class="amountOfWarnings">{{
               departure.trafficDisruptions.length
             }}</span
-            ><i
-              *ngIf="departure.trafficDisruptions.length != 0"
-              class="material-icons red"
-              >warning_amber</i
-            >
+            ><i class="material-icons red">warning_amber</i>
           </div>
           <mat-card-header>
             <mat-card-title>
